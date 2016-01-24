@@ -15,7 +15,9 @@ module.exports.loop = function () {
     roles: ['guard']
   });
 
-  Game.rooms.sim.memory.avgGuardPosition = { x: position.x, y: position.y };
+  if (position) {
+    Game.rooms.sim.memory.avgGuardPosition = { x: position.x, y: position.y };
+  }
 
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];
