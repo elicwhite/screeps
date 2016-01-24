@@ -1,4 +1,3 @@
-var archer = require('archer');
 var harvester = require('harvester');
 var miner = require('miner');
 var minerHelper = require('miner_helper');
@@ -36,10 +35,6 @@ module.exports.loop = function () {
 
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];
-
-    if(creep.memory.role == 'archer') {
-      archer(creep);
-    }
 
     if(creep.memory.role == 'harvester') {
       harvester(creep);
