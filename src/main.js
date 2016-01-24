@@ -2,24 +2,34 @@ var harvester = require('harvester');
 var builder = require('builder');
 var guard = require('guard');
 
-var harvesters = [];
-var guards = [];
+// var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
 
-var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
+var roleTypes = {
+  harvester: [WORK, CARRY, MOVE],
+  builder: [WORK, WORK, CARRY, MOVE],
+  healer: [MOVE, HEAL],
+  guard: [TOUGH, ATTACK, MOVE, MOVE]
+};
 
 Spawn.prototype.createHarvester = function() {
-  var name = this.createCreep( [WORK, CARRY, MOVE], Math.random(), { role: 'harvester' } );
-  Game.creeps[name].memory.upgradingController = false;
+  var name = this.createCreep( roleTypes.harvester, Math.random(), {
+    role: 'harvester',
+    upgradeController: false
+  });
 
   return name;
 };
 
 Spawn.prototype.createBuilder = function() {
-  return this.createCreep( [WORK, WORK, CARRY, MOVE], Math.random(), { role: 'builder' } );
+  return this.createCreep( roleTypes.builder, Math.random(), { role: 'builder' } );
+};
+
+Spawn.prototype.createHealer = function() {
+  return this.createCreep( roleTypes.healer, Math.random(), { role: 'healer' } );
 };
 
 Spawn.prototype.createGuard = function() {
-  return this.createCreep( [TOUGH, ATTACK, MOVE, MOVE], Math.random(), { role: 'guard' } );
+  return this.createCreep( roleTypes.guard, Math.random(), { role: 'guard' } );
 };
 
 if (!Memory.creepTypes) {
@@ -29,6 +39,7 @@ if (!Memory.creepTypes) {
     'guard',
     'harvester',
     'harvester',
+    'healer',
     'guard',
     'guard',
     'guard',
@@ -67,15 +78,24 @@ function tryBuildCreep() {
   var spawn = Game.spawns.Spawn1;
   var energy = spawn.energy;
 
-  if (energy > 200) {
-    if (creepTypes.length) {
-      var type = creepTypes.shift();
+  if (creepTypes.length) {
+    var type = creepTypes.shift();
+
+    var canCreateCreepResult = spawn.canCreateCreep(roleTypes[type]);
+
+    if (canCreateCreepResult === OK) {
       switch(type) {
         case 'harvester':
           return spawn.createHarvester();
+        case 'healer':
+          return spawn.createHealer();
         case 'guard':
           return spawn.createGuard();
       }
+    } else if (canCreateCreepResult === ERR_NOT_ENOUGH_ENERGY) {
+      creepTypes.unshift(type);
+    } else if (canCreateCreepResult !== ERR_BUSY) {
+      console.log('Something bad happened when creating a creep. Code', canCreateCreepResult);
     }
   }
 }
