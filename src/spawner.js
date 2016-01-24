@@ -48,16 +48,20 @@ function getNextCreepType() {
     return 'harvester';
   }
 
-  if (counts.minerHelper < counts.miner) {
-    return 'minerHelper';
+  if (counts.miner < 1) {
+    return 'miner';
   }
 
-  if (counts.miner <= 2) {
-    return 'miner';
+  if (counts.minerHelper < 1) {
+    return 'minerHelper';
   }
 
   if (counts.guard <= 2) {
     return 'guard';
+  }
+
+  if (counts.miner < 2) {
+    return 'miner';
   }
 
   if (counts.healer / counts.guard <= .25) {
@@ -68,9 +72,7 @@ function getNextCreepType() {
     return 'guard';
   }
 
-  if (counts.miner < 4) {
-    return 'miner';
-  }
+  return 'guard';
 }
 
 function getCreepCounts() {

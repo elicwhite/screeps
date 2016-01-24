@@ -1,6 +1,6 @@
 module.exports = function (creep) {
   if(creep.carry.energy < creep.carryCapacity) {
-    var energy = creep.pos.findInRange(Game.DROPPED_ENERGY, 1)[0]
+    var energy = creep.room.find(FIND_DROPPED_RESOURCES)[0]
     if (creep.pickup(energy) === ERR_NOT_IN_RANGE) {
       creep.moveTo(energy);
     }
