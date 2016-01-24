@@ -8,15 +8,15 @@ function upgradeController(creep) {
 }
 
 module.exports = function (creep) {
-  if (creep.memory.upgradingController) {
-    if (creep.carry.energy > 0) {
-      upgradeController(creep);
-    } else {
-      creep.memory.upgradingController = false;
-    }
+  // if (creep.memory.upgradingController) {
+  //   if (creep.carry.energy > 0) {
+  //     upgradeController(creep);
+  //   } else {
+  //     creep.memory.upgradingController = false;
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
   if(creep.carry.energy < creep.carryCapacity) {
     var sources = creep.room.find(FIND_SOURCES);
@@ -31,12 +31,12 @@ module.exports = function (creep) {
     return;
   }
 
-  if (Game.spawns.Spawn1.energy === Game.spawns.Spawn1.energyCapacity) {
-    creep.memory.upgradingController = true;
-    upgradeController(creep);
-  } else {
+  // if (Game.spawns.Spawn1.energy === Game.spawns.Spawn1.energyCapacity) {
+  //   creep.memory.upgradingController = true;
+  //   upgradeController(creep);
+  // } else {
     if(creep.transfer(Game.spawns.Spawn1, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       creep.moveTo(Game.spawns.Spawn1);
     }
-  }
+  // }
 }

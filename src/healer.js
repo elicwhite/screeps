@@ -9,7 +9,20 @@ module.exports = function (creep) {
 
   if(target) {
     if (creep.heal(target) === ERR_NOT_IN_RANGE) {
-      creep.moveTo(target);
+      if(creep.moveTo(target) !== OK) {
+        if(creep.rangedHeal(target) === OK) {
+          return;
+        }
+      }
     }
+
+    return;
+  }
+
+  const avgGuardLoc = creep.room.memory.avgGuardPosition;
+  if (avgGuardLoc) {
+    const position = new RoomPosition(avgGuardLoc.x, avgGuardLoc.y, creep.room.name);
+    creep.moveTo(position);
+    return;
   }
 };

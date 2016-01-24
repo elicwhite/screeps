@@ -8,16 +8,29 @@ var utils = require('utils');
 
 // var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
 
-module.exports.loop = function () {
-  spawner.tryBuildCreep();
-
+function saveAvgGuardPosition() {
   var position = utils.findAvgPositionByCreepRoles(Game.rooms.sim, {
     roles: ['guard']
   });
 
   if (position) {
     Game.rooms.sim.memory.avgGuardPosition = { x: position.x, y: position.y };
+    return true;
   }
+
+  return false;
+}
+
+function calculatePointsOfInterest() {
+  if (saveAvgGuardPosition()) {
+
+  }
+}
+
+module.exports.loop = function () {
+  spawner.tryBuildCreep();
+
+  calculatePointsOfInterest();
 
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];

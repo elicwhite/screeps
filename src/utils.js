@@ -14,7 +14,7 @@ function averagePositionForCreeps(creeps) {
 }
 
 const Utils = {
-  keepAwayFromEnemies: function(creep, { distance = 3 } = {}) {
+  keepAwayFromEnemies: function(creep, { distance = 4 } = {}) {
     const target = creep.pos.findClosestByPath(Game.HOSTILE_CREEPS);
     if(target !== null && target.pos.inRangeTo(creep.pos, distance)) {
       creep.moveTo(creep.pos.x + creep.pos.x - target.pos.x, creep.pos.y + creep.pos.y - target.pos.y );
