@@ -1,4 +1,5 @@
 var harvester = require('harvester');
+var healer = require('healer');
 var builder = require('builder');
 var guard = require('guard');
 
@@ -32,21 +33,28 @@ Spawn.prototype.createGuard = function() {
   return this.createCreep( roleTypes.guard, Math.random(), { role: 'guard' } );
 };
 
-if (!Memory.creepTypes) {
-  Memory.creepTypes = [
-    'harvester',
-    'harvester',
-    'guard',
-    'harvester',
-    'harvester',
-    'healer',
-    'guard',
-    'guard',
-    'guard',
-    'guard',
-    'guard',
-    'guard'
-  ];
+function getNextCreepType() {
+  var counts = getCreepCounts();
+
+  if (counts.harvester <= 2) {
+    return 'harvester';
+  }
+
+  if (counts.guard <= 2) {
+    return 'guard';
+  }
+
+  if (counts.healer / counts.guard <= .25) {
+    return 'healer';
+  }
+
+  if (counts.guard / counts.harvester <= 2) {
+    return 'guard';
+  }
+
+  if (counts.harvester < 10) {
+    return 'harvester';
+  }
 }
 
 var currentRoom = Game.rooms.sim;
@@ -63,11 +71,14 @@ function getCreepCounts() {
     groups[role]++;
 
     return groups;
-  }, {});
+  }, {
+    harvester: 0,
+    guard: 0,
+    healer: 0
+  });
 }
 
 function tryBuildCreep() {
-  var creepTypes = Memory.creepTypes;
   var timeToWave = currentRoom.survivalInfo.timeToWave;
   var invaders = currentRoom.survivalInfo.invaders;
 
@@ -78,24 +89,18 @@ function tryBuildCreep() {
   var spawn = Game.spawns.Spawn1;
   var energy = spawn.energy;
 
-  if (creepTypes.length) {
-    var type = creepTypes.shift();
+  var type = getNextCreepType();
 
-    var canCreateCreepResult = spawn.canCreateCreep(roleTypes[type]);
+  var canCreateCreepResult = spawn.canCreateCreep(roleTypes[type]);
 
-    if (canCreateCreepResult === OK) {
-      switch(type) {
-        case 'harvester':
-          return spawn.createHarvester();
-        case 'healer':
-          return spawn.createHealer();
-        case 'guard':
-          return spawn.createGuard();
-      }
-    } else if (canCreateCreepResult === ERR_NOT_ENOUGH_ENERGY) {
-      creepTypes.unshift(type);
-    } else if (canCreateCreepResult !== ERR_BUSY) {
-      console.log('Something bad happened when creating a creep. Code', canCreateCreepResult);
+  if (canCreateCreepResult === OK) {
+    switch(type) {
+      case 'harvester':
+        return spawn.createHarvester();
+      case 'healer':
+        return spawn.createHealer();
+      case 'guard':
+        return spawn.createGuard();
     }
   }
 }
@@ -108,6 +113,10 @@ module.exports.loop = function () {
 
     if(creep.memory.role == 'harvester') {
       harvester(creep);
+    }
+
+    if(creep.memory.role == 'healer') {
+      healer(creep);
     }
 
     if(creep.memory.role == 'builder') {
