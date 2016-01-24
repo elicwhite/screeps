@@ -13,7 +13,7 @@ function tryMassAttack(creep) {
 }
 
 module.exports = function (creep) {
-  if (memoryUtils.isEnemyInRoom) {
+  if (memoryUtils.isEnemyInRoom()) {
     tryMassAttack(creep);
 
     var target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {

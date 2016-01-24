@@ -1,3 +1,4 @@
+var memoryUtils = require('memory_utils');
 const utils = require('utils');
 
 module.exports = function (creep) {
@@ -19,7 +20,7 @@ module.exports = function (creep) {
     return;
   }
 
-  const avgGuardLoc = creep.room.memory.avgGuardPosition;
+  const avgGuardLoc = memoryUtils.getAvgGuardPosition();
   if (avgGuardLoc) {
     const position = new RoomPosition(avgGuardLoc.x, avgGuardLoc.y, creep.room.name);
     creep.moveTo(position);
