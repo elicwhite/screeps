@@ -1,5 +1,7 @@
 var archer = require('archer');
 var harvester = require('harvester');
+var miner = require('miner');
+var minerHelper = require('minerHelper');
 var healer = require('healer');
 var builder = require('builder');
 var guard = require('guard');
@@ -41,6 +43,14 @@ module.exports.loop = function () {
 
     if(creep.memory.role == 'harvester') {
       harvester(creep);
+    }
+
+    if(creep.memory.role == 'miner') {
+      miner(creep);
+    }
+
+    if(creep.memory.role == 'minerHelper') {
+      minerHelper(creep);
     }
 
     if(creep.memory.role == 'healer') {
