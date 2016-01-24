@@ -1,3 +1,4 @@
+var archer = require('archer');
 var harvester = require('harvester');
 var healer = require('healer');
 var builder = require('builder');
@@ -9,11 +10,12 @@ var roleTypes = {
   harvester: [WORK, CARRY, MOVE],
   builder: [WORK, WORK, CARRY, MOVE],
   healer: [MOVE, HEAL],
-  guard: [TOUGH, ATTACK, MOVE, MOVE]
+  guard: [TOUGH, ATTACK, MOVE, MOVE],
+  archer: [TOUGH, RANGED_ATTACK, MOVE, MOVE]
 };
 
 Spawn.prototype.createHarvester = function() {
-  var name = this.createCreep( roleTypes.harvester, Math.random(), {
+  var name = this.createCreep(roleTypes.harvester, Math.random(), {
     role: 'harvester',
     upgradeController: false
   });
@@ -31,6 +33,10 @@ Spawn.prototype.createHealer = function() {
 
 Spawn.prototype.createGuard = function() {
   return this.createCreep( roleTypes.guard, Math.random(), { role: 'guard' } );
+};
+
+Spawn.prototype.createArcher = function() {
+  return this.createCreep( roleTypes.archer, Math.random(), { role: 'archer' } );
 };
 
 function getNextCreepType() {
@@ -101,6 +107,8 @@ function tryBuildCreep() {
         return spawn.createHealer();
       case 'guard':
         return spawn.createGuard();
+      case 'archer':
+        return spawn.createArcher();
     }
   }
 }
@@ -110,6 +118,10 @@ module.exports.loop = function () {
 
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];
+
+    if(creep.memory.role == 'archer') {
+      archer(creep);
+    }
 
     if(creep.memory.role == 'harvester') {
       harvester(creep);
