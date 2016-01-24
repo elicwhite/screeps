@@ -1,5 +1,5 @@
 module.exports = function (creep) {
-  var targets = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+  var targets = creep.room.find(FIND_HOSTILE_CREEPS, {
     filter: enemy => enemy.owner.username !== 'Source Keeper'
   });
 
