@@ -4,11 +4,18 @@ var healer = require('healer');
 var builder = require('builder');
 var guard = require('guard');
 var spawner = require('spawner');
+var utils = require('utils');
 
 // var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
 
 module.exports.loop = function () {
   spawner.tryBuildCreep();
+
+  var position = utils.findAvgPositionByCreepRoles(Game.rooms.sim, {
+    roles: ['guard']
+  });
+
+  Game.rooms.sim.memory.avgGuardPosition = { x: position.x, y: position.y };
 
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];
