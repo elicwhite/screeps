@@ -1,5 +1,5 @@
-var memoryUtils = require('memory_utils');
-var utils = require('utils');
+var memoryUtils = require('./memory_utils');
+var utils = require('./utils');
 
 function tryMassAttack(creep) {
   if (!creep.getActiveBodyparts(RANGED_ATTACK)) {

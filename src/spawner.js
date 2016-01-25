@@ -10,15 +10,15 @@ var roleTypes = {
 function getNextCreepType() {
   var counts = getCreepCounts();
 
-  if (Object.keys(Game.creeps).length === 0) {
+  if (!Object.keys(Game.creeps).length) {
     return 'harvester';
   }
 
-  if (counts.miner < 1) {
+  if (!counts.miner) {
     return 'miner';
   }
 
-  if (counts.minerHelper < 1) {
+  if (!counts.minerHelper) {
     return 'minerHelper';
   }
 

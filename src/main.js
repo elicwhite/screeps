@@ -1,11 +1,11 @@
-var harvester = require('harvester');
-var miner = require('miner');
-var minerHelper = require('miner_helper');
-var healer = require('healer');
-var builder = require('builder');
-var guard = require('guard');
-var spawner = require('spawner');
-var memoryUtils = require('memory_utils');
+var harvester = require('./harvester');
+var miner = require('./miner');
+var minerHelper = require('./miner_helper');
+var healer = require('./healer');
+var builder = require('./builder');
+var guard = require('./guard');
+var spawner = require('./spawner');
+var memoryUtils = require('./memory_utils');
 
 // var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
 

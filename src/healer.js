@@ -1,5 +1,5 @@
-var memoryUtils = require('memory_utils');
-const utils = require('utils');
+var memoryUtils = require('./memory_utils');
+const utils = require('./utils');
 
 module.exports = function (creep) {
   utils.keepAwayFromEnemies(creep);

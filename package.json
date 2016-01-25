@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "grunt clean && babel src -d dist",
+    "clean": "rm -rf dist && mkdir dist",
+    "dev": "npm run clean &&  watchify -t babelify src/main.js -o dist/main.js",
+    "build": "npm run clean && browserify -t babelify src/main.js > dist/main.js",
     "deploy": "grunt screeps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,11 +14,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.4.5",
     "babel-preset-es2015": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
     "dotenv": "^2.0.0",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
-    "grunt-screeps": "^1.2.0"
+    "grunt-screeps": "^1.2.0",
+    "watchify": "^3.7.0"
   }
 }
