@@ -66,8 +66,8 @@ var Spawner = {
   tryBuildCreep: function() {
     var currentRoom = Game.rooms.sim;
 
-    var timeToWave = currentRoom.survivalInfo.timeToWave;
-    var invaders = currentRoom.survivalInfo.invaders;
+    // var timeToWave = currentRoom.survivalInfo.timeToWave;
+    // var invaders = currentRoom.survivalInfo.invaders;
 
     if (!Game.spawns.Spawn1) {
       return;
