@@ -7,6 +7,9 @@ var RoleCheck = require('./actions/role_check');
 var PickupDroppedResources = require('./actions/pickup_dropped_resources');
 var HarvestSource = require('./actions/harvest_source');
 var TransferEnergyToSpawn = require('./actions/transfer_energy_to_spawn');
+var KeepAwayFromEnemies = require('./actions/keep_away_from_enemies');
+var HealFriends = require('./actions/heal_friends');
+var MoveToAvgGuardPosition = require('./actions/move_to_avg_guard_position');
 
 var tree = new b3.BehaviorTree();
 
@@ -48,21 +51,35 @@ tree.root = new b3.Priority({children: [
         ]
       })
     ]
+  }),
+  new b3.MemSequence({
+    children: [
+      new RoleCheck({
+        role: 'healer'
+      }),
+      new b3.MemSequence({
+        children: [
+          // new KeepAwayFromEnemies({
+          //   distance: 4
+          // }),
+          new HealFriends(),
+          new MoveToAvgGuardPosition()
+        ]
+      })
+    ]
   })
 ]});
 
 var blackboard = new CreepMemory();
 
-// var minerHelper = require('./miner_helper');
-// var healer = require('./healer');
 // var builder = require('./builder');
-// var guard = require('./guard');
+var guard = require('./guard');
 
-// var memoryUtils = require('./memory_utils');
+var memoryUtils = require('./memory_utils');
 
 // var timeToWave = Game.rooms.sim.survivalInfo.timeToWave
 
-// memoryUtils.clearMemoryForTick();
+memoryUtils.clearMemoryForTick();
 spawner.tryBuildCreep();
 
 var treeId = tree.id;
@@ -71,22 +88,15 @@ for(var name in Game.creeps) {
   var creep = Game.creeps[name];
   tree.id = treeId + creep.name;
   tree.tick(creep, blackboard);
+
+  if(creep.memory.role == 'guard') {
+    guard(creep);
+  }
 }
-
-//   if(creep.memory.role == 'minerHelper') {
-//     minerHelper(creep);
-//   }
-
-//   if(creep.memory.role == 'healer') {
-//     healer(creep);
-//   }
 
 //   if(creep.memory.role == 'builder') {
 //     builder(creep);
 //   }
 
-//   if(creep.memory.role == 'guard') {
-//     guard(creep);
-//   }
 // }
 
