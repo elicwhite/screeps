@@ -10,6 +10,9 @@ var TransferEnergyToSpawn = require('./actions/transfer_energy_to_spawn');
 var KeepAwayFromEnemies = require('./actions/keep_away_from_enemies');
 var HealFriends = require('./actions/heal_friends');
 var MoveToAvgGuardPosition = require('./actions/move_to_avg_guard_position');
+var IsEnemyInRoom = require('./actions/is_enemy_in_room');
+var MassAttack = require('./actions/mass_attack');
+var AttackEnemies = require('./actions/attack_enemies');
 
 var tree = new b3.BehaviorTree();
 
@@ -59,10 +62,26 @@ tree.root = new b3.Priority({children: [
       }),
       new b3.MemSequence({
         children: [
-          // new KeepAwayFromEnemies({
-          //   distance: 4
-          // }),
           new HealFriends(),
+          new MoveToAvgGuardPosition()
+        ]
+      })
+    ]
+  }),
+  new b3.MemSequence({
+    children: [
+      new RoleCheck({
+        role: 'guard'
+      }),
+      new b3.Priority({
+        children: [
+          new b3.Sequence({
+            children: [
+              new IsEnemyInRoom(),
+              new MassAttack(),
+              new AttackEnemies()
+            ]
+          }),
           new MoveToAvgGuardPosition()
         ]
       })
@@ -73,7 +92,6 @@ tree.root = new b3.Priority({children: [
 var blackboard = new CreepMemory();
 
 // var builder = require('./builder');
-var guard = require('./guard');
 
 var memoryUtils = require('./memory_utils');
 
@@ -88,10 +106,6 @@ for(var name in Game.creeps) {
   var creep = Game.creeps[name];
   tree.id = treeId + creep.name;
   tree.tick(creep, blackboard);
-
-  if(creep.memory.role == 'guard') {
-    guard(creep);
-  }
 }
 
 //   if(creep.memory.role == 'builder') {
