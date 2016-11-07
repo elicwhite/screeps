@@ -18,8 +18,8 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "dotenv": "^2.0.0",
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
     "grunt-screeps": "^1.2.0",
     "watchify": "^3.7.0"
   }
